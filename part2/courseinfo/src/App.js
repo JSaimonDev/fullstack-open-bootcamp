@@ -6,6 +6,7 @@ const Content = ({ parts }) => {
       {parts.map((parts) => (
         <Part name={parts.name} exercises={parts.exercises} key={parts.id} />
       ))}
+      <Total parts={parts} />
     </div>
   );
 };
@@ -25,6 +26,12 @@ const Course = ({ course }) => {
       <Content parts={course.parts} />
     </div>
   );
+};
+
+const Total = ({ parts }) => {
+  let total = 0;
+  parts.map((parts) => (total += parts.exercises));
+  return <div>Total of {total} exercises</div>;
 };
 
 const App = () => {
