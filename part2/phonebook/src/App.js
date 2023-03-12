@@ -1,12 +1,13 @@
 import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Contacts = ({ persons }) => {
   return (
     <div>
-      {console.log("Contacts")}
       {persons.map((persons) => (
         <p>
-          {persons.name} {persons.tel}
+          {persons.name} {persons.number}
         </p>
       ))}
     </div>
@@ -19,10 +20,6 @@ const FileteredContacts = ({ persons, newSearch }) => {
   );
   return (
     <div>
-      {console.log("FilteredContacts")}
-      {console.log(newSearch)}
-      {console.log(filteredPersons)}
-      {console.log(persons)}
       {filteredPersons.map((persons) => (
         <p>
           {persons.name} {persons.tel}
@@ -41,12 +38,16 @@ const Search = ({ handleSearch }) => {
 };
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", tel: "950358234" },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newTel, setTel] = useState("");
   const [newSearch, setSearch] = useState("");
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/persons")
+      .then((response) => setPersons(response.data));
+  }, []);
 
   const addContact = (event) => {
     if (persons.some((persons) => persons.name === newName)) {
