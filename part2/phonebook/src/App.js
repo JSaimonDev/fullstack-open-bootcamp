@@ -1,17 +1,32 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import axios from "axios";
+import { getAll, post, deleteEntry } from "./services/contacts.js";
 
-const Contacts = ({ persons }) => {
+const Contacts = ({ persons, setPersons }) => {
   return (
     <div>
       {persons.map((persons) => (
         <p>
           {persons.name} {persons.number}
+          <DeleteButton
+            id={persons.id}
+            setPersons={setPersons}
+            name={persons.name}
+          />
         </p>
       ))}
     </div>
   );
+};
+
+const DeleteButton = ({ id, setPersons, name }) => {
+  const handleClick = () => {
+    if (window.confirm("Delete " + name + "?")) {
+      deleteEntry(id);
+      getAll().then((response) => setPersons(response));
+    }
+  };
+  return <button onClick={handleClick}>Delete</button>;
 };
 
 const FileteredContacts = ({ persons, newSearch }) => {
@@ -22,7 +37,7 @@ const FileteredContacts = ({ persons, newSearch }) => {
     <div>
       {filteredPersons.map((persons) => (
         <p>
-          {persons.name} {persons.tel}
+          {persons.name} {persons.number}
         </p>
       ))}
     </div>
@@ -40,37 +55,43 @@ const Search = ({ handleSearch }) => {
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
-  const [newTel, setTel] = useState("");
+  const [newNumber, setNumber] = useState("");
   const [newSearch, setSearch] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => setPersons(response.data));
+    getAll().then((response) => setPersons(response));
   }, []);
 
   const addContact = (event) => {
-    if (persons.some((persons) => persons.name === newName)) {
-      window.alert(newName + " is already used");
-      event.preventDefault();
-    } else {
-      const newObject = {
-        name: newName,
-        tel: newTel,
-      };
-      event.preventDefault();
-      setPersons(persons.concat([newObject]));
-      setNewName("");
-      setTel("");
-    }
+    event.preventDefault();
+    const newPost = {
+      name: newName,
+      number: newNumber,
+    };
+    const existName = persons.findIndex((person) => person.name === newName);
+    console.log(existName);
+    post(newPost).then((response) => {
+      if (existName >= 0) {
+        const updatedPersons = persons.map((person, index) => {
+          if (index === existName) {
+            return { ...person, number: newNumber };
+          } else {
+            return person;
+          }
+        });
+        setPersons(updatedPersons);
+      } else setPersons(persons.concat(response.data));
+    });
+    setNewName("");
+    setNumber("");
   };
 
   const handleInput = (event) => {
     setNewName(event.target.value);
   };
 
-  const handleTel = (event) => {
-    setTel(event.target.value);
+  const handleNumber = (event) => {
+    setNumber(event.target.value);
   };
 
   const handleSearch = (event) => {
@@ -86,7 +107,7 @@ const App = () => {
           name: <input onChange={handleInput} value={newName} />
         </div>
         <div>
-          tel: <input onChange={handleTel} value={newTel}></input>
+          tel: <input onChange={handleNumber} value={newNumber}></input>
         </div>
         <div>
           <button type="submit">add</button>
@@ -94,7 +115,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       {newSearch === "" ? (
-        <Contacts persons={persons} />
+        <Contacts persons={persons} setPersons={setPersons} />
       ) : (
         <FileteredContacts persons={persons} newSearch={newSearch} />
       )}
