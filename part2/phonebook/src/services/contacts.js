@@ -19,7 +19,6 @@ const getAll = () => {
 };
 
 const deleteEntry = (id) => {
-  console.log(id);
   const f = axios.delete(url + "/" + id);
   return f;
 };

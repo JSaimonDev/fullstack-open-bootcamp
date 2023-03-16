@@ -52,11 +52,49 @@ const Search = ({ handleSearch }) => {
   );
 };
 
+const Message = ({ message, error, on }) => {
+  const divStyle = {
+    color: "green",
+    background: "lightgrey",
+    fontSize: 20,
+    borderStyle: "solid",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  };
+
+  const errorStyle = {
+    color: "red",
+    background: "lightgrey",
+    fontSize: 20,
+    borderStyle: "solid",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  };
+  if (on === true) {
+    return (
+      <div>
+        {error === true ? (
+          <div style={errorStyle}>{message}</div>
+        ) : (
+          <div style={divStyle}>{message}</div>
+        )}
+      </div>
+    );
+  }
+};
+
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNumber] = useState("");
   const [newSearch, setSearch] = useState("");
+  const [message, setMessage] = useState({
+    message: "",
+    error: false,
+    on: false,
+  });
 
   useEffect(() => {
     getAll().then((response) => setPersons(response));
@@ -69,19 +107,46 @@ const App = () => {
       number: newNumber,
     };
     const existName = persons.findIndex((person) => person.name === newName);
-    console.log(existName);
-    post(newPost).then((response) => {
-      if (existName >= 0) {
-        const updatedPersons = persons.map((person, index) => {
-          if (index === existName) {
-            return { ...person, number: newNumber };
-          } else {
-            return person;
-          }
+    post(newPost)
+      .then((response) => {
+        if (existName >= 0) {
+          const updatedPersons = persons.map((person, index) => {
+            if (index === existName) {
+              setMessage({
+                message: person.name + "'s number has been changed",
+                error: false,
+                on: true,
+              });
+              return { ...person, number: newNumber };
+            } else {
+              return person;
+            }
+          });
+          setPersons(updatedPersons);
+        } else {
+          setMessage({
+            message: newPost.name + " has been added",
+            error: false,
+            on: true,
+          });
+          console.log(message);
+          setPersons(persons.concat(response.data));
+        }
+      })
+      .catch((error) => {
+        setMessage({
+          message: newPost.name + " is not in the database",
+          error: true,
+          on: true,
         });
-        setPersons(updatedPersons);
-      } else setPersons(persons.concat(response.data));
-    });
+      });
+    // setTimeout(() => {
+    //   setMessage({
+    //     message: "",
+    //     error: false,
+    //     on: false,
+    //   });
+    // }, 5000);
     setNewName("");
     setNumber("");
   };
@@ -101,6 +166,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message
+        message={message.message}
+        error={message.error}
+        on={message.on}
+      />
       <Search handleSearch={handleSearch} />
       <form onSubmit={addContact}>
         <div>
