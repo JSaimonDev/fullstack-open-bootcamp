@@ -107,6 +107,7 @@ const App = () => {
       number: newNumber,
     };
     const existName = persons.findIndex((person) => person.name === newName);
+    console.log(existName);
     post(newPost)
       .then((response) => {
         if (existName >= 0) {
@@ -140,13 +141,13 @@ const App = () => {
           on: true,
         });
       });
-    // setTimeout(() => {
-    //   setMessage({
-    //     message: "",
-    //     error: false,
-    //     on: false,
-    //   });
-    // }, 5000);
+    setTimeout(() => {
+      setMessage({
+        message: "",
+        error: false,
+        on: false,
+      });
+    }, 5000);
     setNewName("");
     setNumber("");
   };

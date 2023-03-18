@@ -1,9 +1,13 @@
+const { response } = require("express");
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+const cors = require("cors");
 
 app.use(express.json());
 app.use(morgan());
+app.use(cors());
+app.use(express.static("build"));
 
 let list = [
   {
@@ -34,11 +38,11 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
-app.get("/api/persons", morgan("tiny"), (request, response) => {
+app.get("/api/persons", (request, response) => {
   response.json(list);
 });
 
-app.get("/info", morgan("tiny"), (request, response) => {
+app.get("/info", (request, response) => {
   const length = "Phonebook has info for " + list.length + " people";
   const date = new Date();
 
@@ -49,20 +53,20 @@ app.get("/info", morgan("tiny"), (request, response) => {
   response.end();
 });
 
-app.get("/api/persons/:id", morgan("tiny"), (request, response) => {
+app.get("/api/persons/:id", (request, response) => {
   const id = request.params.id;
   const person = list.find((person) => person.id === Number(id));
   person ? response.json(person) : response.status(404).end();
 });
 
-app.delete("/api/persons/:id", morgan("tiny"), (request, response) => {
+app.delete("/api/persons/:id", (request, response) => {
   const id = request.params.id;
   list = list.filter((person) => person.id !== Number(id));
 
   response.status(204).end();
 });
 
-app.post("/api/persons", morgan("tiny"), (request, response) => {
+app.post("/api/persons", (request, response) => {
   const id = getRandomInt(1, 10000);
   const newPerson = request.body;
   newPerson.id = id;
@@ -74,7 +78,17 @@ app.post("/api/persons", morgan("tiny"), (request, response) => {
     response.status(400).send("Error: Number missing");
   else if (nameExist)
     response.status(409).send(`Name ${newPerson.name} already exist`);
-  else response.status(200).end();
+  else response.status(200).send(newPerson);
+});
+
+app.put("/api/persons/:id", (req, res) => {
+  const id = req.params.id;
+  const person = list.find((person) => Number(person.id) === id);
+  if (person) {
+    person = req.body;
+    console.log(person);
+    response.status(200).send(req.body);
+  } else response.status(404).end();
 });
 
 const PORT = 3001;
