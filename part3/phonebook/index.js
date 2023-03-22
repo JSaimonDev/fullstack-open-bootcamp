@@ -1,56 +1,18 @@
+const mongoose = require("mongoose");
 const { response } = require("express");
 const express = require("express");
 const app = express();
-const morgan = require("morgan");
 const cors = require("cors");
-
 app.use(express.json());
-app.use(morgan());
 app.use(cors());
 app.use(express.static("build"));
-
-let list = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
-];
-
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min) + min);
-}
+require("./mongo.js");
+const { Person, createNewPerson } = require("./models/Person.js");
 
 app.get("/api/persons", (request, response) => {
-  response.json(list);
-});
-
-app.get("/info", (request, response) => {
-  const length = "Phonebook has info for " + list.length + " people";
-  const date = new Date();
-
-  const message = `${length}\n${date.toLocaleString()}`;
-
-  response.write(length + "\n");
-  response.write(date.toLocaleString());
-  response.end();
+  Person.find({})
+    .then((persons) => response.json(persons))
+    .then(() => mongoose.connection.close());
 });
 
 app.get("/api/persons/:id", (request, response) => {
@@ -67,18 +29,29 @@ app.delete("/api/persons/:id", (request, response) => {
 });
 
 app.post("/api/persons", (request, response) => {
-  const id = getRandomInt(1, 10000);
-  const newPerson = request.body;
-  newPerson.id = id;
-  const nameExist = list.find((person) => person.name === newPerson.name);
-  list = list.concat(newPerson);
-
-  if (!newPerson.name) response.status(400).send("Error: Name missing");
-  else if (!newPerson.number)
+  mongoose
+    .connect(url, {
+      useNewUrlParser: true,
+    })
+    .then(() => {
+      console.log("conectado");
+    });
+  const newPerson = createNewPerson(request.body.name, request.body.number);
+  if (!request.body.name) response.status(400).send("Error: Name missing");
+  else if (!request.body.number)
     response.status(400).send("Error: Number missing");
-  else if (nameExist)
-    response.status(409).send(`Name ${newPerson.name} already exist`);
-  else response.status(200).send(newPerson);
+  else {
+    newPerson
+      .save()
+      .then((result) => {
+        console.log(newPerson.name + " saved");
+        mongoose.connection.close();
+      })
+      .catch((err) => {
+        console.log(err);
+        mongoose.connection.close();
+      });
+  }
 });
 
 app.put("/api/persons/:id", (req, res) => {

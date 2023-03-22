@@ -1,21 +1,15 @@
 import axios from "axios";
-const url = "/api/persons";
+const url = "http://localhost:3001/api/persons";
 
 const post = (newPost) => {
   return getAll().then((response) => {
-    const existName = response.find((person) => person.name === newPost.name);
-    if (existName) {
-      console.log("if");
-      return axios.put(url + "/" + existName.id, newPost);
-    } else {
-      console.log("else");
-      return axios.post(url, newPost);
-    }
+    return axios.post(url, newPost);
   });
 };
 
 const getAll = () => {
   return axios.get(url).then((response) => {
+    console.log(response.data);
     return response.data;
   });
 };

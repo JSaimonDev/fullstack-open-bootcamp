@@ -3,15 +3,16 @@ import { useEffect } from "react";
 import { getAll, post, deleteEntry } from "./services/contacts.js";
 
 const Contacts = ({ persons, setPersons }) => {
+  console.log(persons);
   return (
     <div>
-      {persons.map((persons) => (
+      {persons.map((person) => (
         <p>
-          {persons.name} {persons.number}
+          {person.name} {person.number}
           <DeleteButton
-            id={persons.id}
+            id={person.id}
             setPersons={setPersons}
-            name={persons.name}
+            name={person.name}
           />
         </p>
       ))}
@@ -108,39 +109,38 @@ const App = () => {
     };
     const existName = persons.findIndex((person) => person.name === newName);
     console.log(existName);
-    post(newPost)
-      .then((response) => {
-        if (existName >= 0) {
-          const updatedPersons = persons.map((person, index) => {
-            if (index === existName) {
-              setMessage({
-                message: person.name + "'s number has been changed",
-                error: false,
-                on: true,
-              });
-              return { ...person, number: newNumber };
-            } else {
-              return person;
-            }
-          });
-          setPersons(updatedPersons);
-        } else {
-          setMessage({
-            message: newPost.name + " has been added",
-            error: false,
-            on: true,
-          });
-          console.log(message);
-          setPersons(persons.concat(response.data));
-        }
-      })
-      .catch((error) => {
+    post(newPost).then((response) => {
+      if (existName >= 0) {
+        const updatedPersons = persons.map((person, index) => {
+          if (index === existName) {
+            setMessage({
+              message: person.name + "'s number has been changed",
+              error: false,
+              on: true,
+            });
+            return { ...person, number: newNumber };
+          } else {
+            return person;
+          }
+        });
+        setPersons(updatedPersons);
+      } else {
         setMessage({
-          message: newPost.name + " is not in the database",
-          error: true,
+          message: newPost.name + " has been added",
+          error: false,
           on: true,
         });
-      });
+        console.log(message);
+        setPersons(persons.concat(response.data));
+      }
+    });
+    // .catch((error) => {
+    //   setMessage({
+    //     message: newPost.name + " is not in the database",
+    //     error: true,
+    //     on: true,
+    //   });
+    // });
     setTimeout(() => {
       setMessage({
         message: "",
