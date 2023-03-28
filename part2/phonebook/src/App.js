@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { getAll, post, deleteEntry } from "./services/contacts.js";
+import { getAll, post, deleteEntry, put } from "./services/contacts.js";
 
 const Contacts = ({ persons, setPersons }) => {
-  console.log(persons);
   return (
     <div>
       {persons.map((person) => (
@@ -23,8 +22,7 @@ const Contacts = ({ persons, setPersons }) => {
 const DeleteButton = ({ id, setPersons, name }) => {
   const handleClick = () => {
     if (window.confirm("Delete " + name + "?")) {
-      deleteEntry(id);
-      getAll().then((response) => setPersons(response));
+      deleteEntry(id).then(getAll().then((response) => setPersons(response)));
     }
   };
   return <button onClick={handleClick}>Delete</button>;
@@ -107,40 +105,26 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    const existName = persons.findIndex((person) => person.name === newName);
-    console.log(existName);
-    post(newPost).then((response) => {
-      if (existName >= 0) {
-        const updatedPersons = persons.map((person, index) => {
-          if (index === existName) {
-            setMessage({
-              message: person.name + "'s number has been changed",
-              error: false,
-              on: true,
-            });
-            return { ...person, number: newNumber };
-          } else {
-            return person;
-          }
+    const nameExist = persons.find((person) => person.name === newName);
+    if (nameExist) {
+      put(newPost, nameExist.id).then((response) => {
+        setMessage({
+          message: newPost.name + " has been updated",
+          error: false,
+          on: true,
         });
-        setPersons(updatedPersons);
-      } else {
+        getAll().then((response) => setPersons(response));
+      });
+    } else {
+      post(newPost).then((response) => {
         setMessage({
           message: newPost.name + " has been added",
           error: false,
           on: true,
         });
-        console.log(message);
         setPersons(persons.concat(response.data));
-      }
-    });
-    // .catch((error) => {
-    //   setMessage({
-    //     message: newPost.name + " is not in the database",
-    //     error: true,
-    //     on: true,
-    //   });
-    // });
+      });
+    }
     setTimeout(() => {
       setMessage({
         message: "",
