@@ -1,21 +1,17 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
-const mongoose = require("mongoose");
-require("dotenv").config();
-const { Blog } = require("./models/blog");
-const blogsRouter = require("./controllers/blog");
-
-const password = process.env.PASSWORD;
-
-const mongoUrl = `mongodb+srv://admin:${password}@cluster0.h9qmslj.mongodb.net/?retryWrites=true&w=majority`;
+const express = require('express')
+const app = express()
+const cors = require('cors')
+const mongoose = require('mongoose')
+require('dotenv').config()
+const blogsRouter = require('./controllers/blog')
+const config = require('./utils/config')
 
 mongoose
-  .connect(mongoUrl, { useNewUrlParser: true })
-  .then(() => console.log("conected to MongoDB"));
+  .connect(config.MONGODB_URI, { useNewUrlParser: true })
+  .then(() => console.log('connected to MongoDB'))
 
-app.use(cors());
-app.use(express.json());
-app.use("/api/blogs", blogsRouter);
+app.use(cors())
+app.use(express.json())
+app.use('/api/blogs', blogsRouter)
 
-module.exports = app;
+module.exports = app
