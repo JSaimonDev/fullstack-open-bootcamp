@@ -5,5 +5,6 @@ content-type: application/json
   "title": "Planeta Gratis",
   "author": "Yo",
   "url": "planetagratis.com",
-  "likes": "2000000"
+  "likes": "2000000",
+  "user": "642952371d67ac2f8842450b"
 }

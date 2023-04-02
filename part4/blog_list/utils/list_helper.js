@@ -1,3 +1,5 @@
+const User = require('../models/user')
+
 const dummy = (blogs) => {
   return 1
 }
