@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/blogs
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lUG9zdCIsImlkIjoiNjQyOTUyMzcxZDY3YWMyZjg4NDI0NTBiIiwiaWF0IjoxNjgwNTEzNjAzfQ.vlG4yLSfOLERzKYmljKqYMIMB10SQLf_8qLBMroTI5s
 
 {
   "title": "Planeta Gratis",
   "author": "Yo",
   "url": "planetagratis.com",
-  "likes": "2000000",
-  "user": "642952371d67ac2f8842450b"
+  "likes": 2000000,
 }
