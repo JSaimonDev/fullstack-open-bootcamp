@@ -10,10 +10,11 @@ function errorHandler (err, req, res, next) {
 }
 
 function tokenExtractor (req, res, next) {
+  console.log('hola')
   const authorization = req.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     req.token = authorization.substring(7)
-  } else return null
+  }
   next()
 }
 
