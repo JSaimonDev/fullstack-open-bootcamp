@@ -31,25 +31,25 @@ blogsRouter.post('/', async (req, res) => {
 })
 
 blogsRouter.delete('/:id', async (req, res) => {
-  const user = await User.findById(req.user)
-  const blog = await Blog.findById(req.params.id)
-  if (blog.user.toString() !== user._id.toString()) {
-    return res.status(401).json({ error: 'token missing or invalid' })
+  try {
+    await Blog.findByIdAndRemove(req.params.id)
+    res.status(204).end()
+  } catch {
+    res.status(400).end()
   }
-  await Blog.findByIdAndRemove(req.params.id)
-  res.status(204).end()
   console.log('blog deleted')
 })
 
 blogsRouter.put('/:id', async (req, res) => {
+  console.log('put')
   const body = req.body
-  const blog = new Blog({
+  const blog = {
     title: body.title,
     author: body.author,
     url: body.url,
     likes: body.likes
-  })
-  const postBlog = await blog.save()
+  }
+  const postBlog = await Blog.findByIdAndUpdate(req.params.id, blog, { new: true })
   res.status(201)
   res.json(postBlog)
 })
