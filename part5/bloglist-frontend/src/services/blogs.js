@@ -7,9 +7,10 @@ const setToken = newToken => {
   token = `bearer ${newToken}`
 }
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+const getAll = async () => {
+  const request = await axios.get(baseUrl)
+  const sortedData = request.data.sort((a, b) => b.likes - a.likes)
+  return sortedData
 }
 
 const postBlog = (newBlog) => {
@@ -20,5 +21,20 @@ const postBlog = (newBlog) => {
   return request.then(response => response.data)
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export { getAll, setToken, token, postBlog }
+const updateBlog = (id, newBlog) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  const request = axios.put(`${baseUrl}/${id}`, newBlog, config)
+  return request.then(response => response.data)}
+
+const deleteBlog = (id) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  const request = axios.delete(`${baseUrl}/${id}`)
+  return request.then(response => response.status)}
+
+
+
+export { getAll, setToken, token, postBlog, updateBlog, deleteBlog }
