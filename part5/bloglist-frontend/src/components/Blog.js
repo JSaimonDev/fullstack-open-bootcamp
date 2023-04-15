@@ -3,7 +3,7 @@ import {updateBlog, deleteBlog } from "../services/blogs"
 
 
 
-const Blog = ({blog, setBlogs, blogs}) => {
+const Blog = ({blog, setBlogs, blogs, toggleableMockHandlder, likeMockHandler}) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -36,7 +36,15 @@ const Blog = ({blog, setBlogs, blogs}) => {
 
   return (
   <div style={blogStyle}>
-    <Toggleable buttonShow={'Show blog'} buttonHide={'Hide blog'}>{blog.title} &nbsp; <button onClick={() => handleDelete(blog)}>Delete</button><br />{blog.url}<br />{blog.likes}<button onClick={()=>handleLike(blog, blogs)}>like</button><br />{blog.author}<br /></Toggleable>
+    <Toggleable buttonShow={'Show blog'} buttonHide={'Hide blog'} mockHandler={toggleableMockHandlder}>
+      <div>{blog.title} &nbsp; 
+      <button onClick={() => handleDelete(blog)}>Delete</button></div>
+      <div>{blog.author}</div>
+      <Toggleable buttonShow={'Show details'} buttonHide={'Hide details'} mockHandler={toggleableMockHandlder}>
+      <div>{blog.likes}
+      <button onClick={likeMockHandler ? () => { likeMockHandler() } : () => handleLike(blog, blogs) }>like</button></div>
+      <div>{blog.url}</div></Toggleable>
+      <br /></Toggleable>
   </div>  )
 }
 

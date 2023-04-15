@@ -1,23 +1,25 @@
 import { useState } from "react"
 import { postBlog } from "../services/blogs"
 
-const handleNewBlog = (newBlog, setNewBlog, addBlog) => {
+const handleNewBlog = (event, newBlog, setNewBlog, addBlog) => {
+    event.preventDefault()
     const updateBlog = postBlog(newBlog)
     addBlog(updateBlog)
     setNewBlog({title: "", author: "", url: ""})
   }
 
 
-const BlogForm = ({setBlogs, blogs, addBlog}) => {
+const BlogForm = ({setBlogs, blogs, addBlog, submitMockHandler}) => {
     const [newBlog, setNewBlog] = useState({title: "", author: "", url: ""})
     
     return (
     <div>
       <h2>create new blog</h2>
-      <form onSubmit={() => handleNewBlog(newBlog, setNewBlog, addBlog)}>
+      <form onSubmit={ submitMockHandler ? (event) => { submitMockHandler(newBlog); event.preventDefault()} : (event) => handleNewBlog(event, newBlog, setNewBlog, addBlog)}>
         <div>
-          title&nbsp;
+          <label htmlFor="title-input">Title</label>
           <input
+          id= "title-input"
             type="text"
             value={newBlog.title}
             name="Title"
@@ -25,8 +27,9 @@ const BlogForm = ({setBlogs, blogs, addBlog}) => {
           />
         </div>
         <div>
-          author&nbsp;
+          <label htmlFor="author-input">Author</label>
           <input
+          id= "author-input"
             type="text"
             value={newBlog.author}
             name="Author"
@@ -34,8 +37,9 @@ const BlogForm = ({setBlogs, blogs, addBlog}) => {
           />
         </div>
         <div>
-          url&nbsp;
+          <label htmlFor="url-input">Url</label>
           <input
+          id = "url-input"
             type="text"
             value={newBlog.url}
             name="Url"
