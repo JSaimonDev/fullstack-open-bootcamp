@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon index.js",
     "start": "NODE_ENV=production node index.js",
-    "test": "NODE_ENV=test jest --verbose"
+    "test": "NODE_ENV=test jest --verbose",
+    "start:dev": "NODE_ENV=development node index.js"
   },
   "author": "",
   "license": "ISC",

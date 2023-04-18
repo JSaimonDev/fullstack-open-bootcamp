@@ -1,14 +1,13 @@
 import { useState } from "react"
 import { postBlog } from "../services/blogs"
 
-const handleNewBlog = (event, newBlog, setNewBlog, addBlog) => {
+const handleNewBlog = async (event, newBlog, setNewBlog, addBlog) => {
     event.preventDefault()
-    const updateBlog = postBlog(newBlog)
+    const updateBlog = await postBlog(newBlog)
     addBlog(updateBlog)
     setNewBlog({title: "", author: "", url: ""})
   }
-
-
+  
 const BlogForm = ({setBlogs, blogs, addBlog, submitMockHandler}) => {
     const [newBlog, setNewBlog] = useState({title: "", author: "", url: ""})
     
@@ -46,7 +45,7 @@ const BlogForm = ({setBlogs, blogs, addBlog, submitMockHandler}) => {
             onChange={({ target }) => setNewBlog({...newBlog, url: target.value})}
           />
         </div>
-        <button type="submit">create</button>
+        <button id='create-blog-button'type="submit">create</button>
       </form>
     </div>)
   }
