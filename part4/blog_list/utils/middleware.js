@@ -26,6 +26,7 @@ function userExtractor (req, res, next) {
       return res.status(401).json({ error: 'token missing or invalid' })
     }
     req.user = decodedToken.id
+    console.log(decodedToken)
   }
   next()
 }

@@ -1,10 +1,10 @@
-POST http://localhost:3001/api/blogs
+POST http://localhost:3003/api/blogs
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2NDNiZWM1MGY0M2IwZmY1YzAzMjk0ODYiLCJpYXQiOjE2ODE2NDg3ODR9.XTZITRfI9fT7_JS1j2hriNTG3K1CF5dg4hfH2eK3SeE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyIiwiaWQiOiI2NDNlNDkwYzI1YzE5OGFlMTljYTY4ZDEiLCJpYXQiOjE2ODE4MTc4MDB9.-fBcZFpaSCY0IjjDCsH3W6NizeI9hhTdIXp_WaeMRYg
 
 {
-  "title": "peoag2372ije",
-  "author": "Toketa723472347hehasee",
-  "url": "uhh2347hasdhh.es",
-  "likes": "3"
+  "title": "peot43t34te",
+  "author": "Toketa34t33h7hehasee",
+  "url": "uhh3h43sdhh.es",
+  "likes": "33"
 }

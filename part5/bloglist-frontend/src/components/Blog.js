@@ -3,7 +3,7 @@ import {updateBlog, deleteBlog } from "../services/blogs"
 
 
 
-const Blog = ({blog, setBlogs, blogs, toggleableMockHandlder, likeMockHandler}) => {
+const Blog = ({blog, setBlogs, blogs, toggleableMockHandlder, likeMockHandler, token}) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -21,8 +21,8 @@ const Blog = ({blog, setBlogs, blogs, toggleableMockHandlder, likeMockHandler}) 
     } 
   }
 
-  const handleDelete = async (blog) => {
-    const deleteStatus = await deleteBlog(blog.id)
+  const handleDelete = async (blog, token) => {
+    const deleteStatus = await deleteBlog(blog.id, token)
     if (deleteStatus === 204){
       const updatedBlogs = blogs.filter((b) => b.id !== blog.id)
       setBlogs(updatedBlogs)
@@ -35,10 +35,10 @@ const Blog = ({blog, setBlogs, blogs, toggleableMockHandlder, likeMockHandler}) 
   
 
   return (
-  <div style={blogStyle}>
-    <Toggleable buttonShow={'Show blog'} buttonHide={'Hide blog'} mockHandler={toggleableMockHandlder}>
+  <div style={blogStyle} className={'blog'}>
+    <Toggleable buttonShow={'Show blog'} buttonHide={'Hide blog'} mockHandler={toggleableMockHandlder} >
       <div>{blog.title} &nbsp; 
-      <button onClick={() => handleDelete(blog)}>Delete</button></div>
+      <button onClick={() => handleDelete(blog, token)}>Delete</button></div>
       <div>{blog.author}</div>
       <Toggleable buttonShow={'Show details'} buttonHide={'Hide details'} mockHandler={toggleableMockHandlder}>
       <div>{blog.likes}

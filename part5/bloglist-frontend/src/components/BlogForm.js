@@ -1,20 +1,20 @@
 import { useState } from "react"
 import { postBlog } from "../services/blogs"
 
-const handleNewBlog = async (event, newBlog, setNewBlog, addBlog) => {
+const handleNewBlog = async (event, newBlog, setNewBlog, addBlog, token) => {
     event.preventDefault()
-    const updateBlog = await postBlog(newBlog)
+    const updateBlog = await postBlog(newBlog, token)
     addBlog(updateBlog)
     setNewBlog({title: "", author: "", url: ""})
   }
   
-const BlogForm = ({setBlogs, blogs, addBlog, submitMockHandler}) => {
+const BlogForm = ({setBlogs, blogs, addBlog, submitMockHandler, token}) => {
     const [newBlog, setNewBlog] = useState({title: "", author: "", url: ""})
     
     return (
     <div>
       <h2>create new blog</h2>
-      <form onSubmit={ submitMockHandler ? (event) => { submitMockHandler(newBlog); event.preventDefault()} : (event) => handleNewBlog(event, newBlog, setNewBlog, addBlog)}>
+      <form onSubmit={ submitMockHandler ? (event) => { submitMockHandler(newBlog); event.preventDefault()} : (event) => handleNewBlog(event, newBlog, setNewBlog, addBlog, token)}>
         <div>
           <label htmlFor="title-input">Title</label>
           <input

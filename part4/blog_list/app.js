@@ -13,7 +13,11 @@ const { loginRouter } = require('./controllers/login')
 mongoose
   .connect(config.MONGODB_URI, { useNewUrlParser: true })
   .then(() => console.log('connected to MongoDB'))
-app.use(cors())
+app.use(cors({
+  origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Authorization']
+}))
 app.use(express.json())
 app.use(middleware.tokenExtractor)
 app.use('/api/blogs', middleware.userExtractor, blogsRouter)

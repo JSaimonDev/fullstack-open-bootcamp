@@ -1,4 +1,4 @@
-import loginService from "../services/login.js";
+import { login } from "../services/login.js";
 
 const LoginForm = ({errorMessage, username, setUsername, password, setPassword, setErrorMessage, setUser, setToken}) => (
     <div>
@@ -33,7 +33,7 @@ const LoginForm = ({errorMessage, username, setUsername, password, setPassword, 
   const handleLogin = async (event, username, password, setUser, setToken, setUsername, setPassword, setErrorMessage) => {
     event.preventDefault()
     try{
-      const user = await loginService.login({
+      const user = await login({
         username,
         password,
       });
@@ -45,7 +45,8 @@ const LoginForm = ({errorMessage, username, setUsername, password, setPassword, 
       setUsername("");
       setPassword("");
     }
-    catch{
+    catch(error){
+      console.error(error)
       setErrorMessage("Wrong credentials")
       setTimeout(() => {
         setErrorMessage(null)
