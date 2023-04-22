@@ -14,7 +14,7 @@ const dispatch = useDispatch()
 
  return (
     <div>
-              <h2>create new</h2>   
+    <h2>create new</h2>   
     <form onSubmit = {(event) => addNote(event)}>
     <div><input name='anecdote' /></div>
     <button>create</button>
