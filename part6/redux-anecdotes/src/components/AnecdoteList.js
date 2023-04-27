@@ -1,13 +1,12 @@
 import { useSelector, useDispatch } from "react-redux"
-import { vote } from '../reducers/anecdoteReducer'
-
+import { voteAnecdoteAsync } from '../reducers/anecdoteReducer'
 const AnecdoteList = () => {
     const anecdotes = useSelector(state => state.anecdotes)
     const filter = useSelector(state => state.filter)
     const dispatch = useDispatch()
 
     const handleClick = (id) => {
-        dispatch(vote(id))
+        dispatch(voteAnecdoteAsync(id, anecdotes))
       }
 
     const filterAnecdotes = (filter) => {

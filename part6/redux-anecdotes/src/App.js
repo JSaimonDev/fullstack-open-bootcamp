@@ -5,7 +5,7 @@ import  Notification from './components/Notification'
 import { useEffect } from 'react'
 import { getAll} from './services/anecdotes'
 import { useDispatch } from 'react-redux'
-import { initializeAnecdotes } from './reducers/anecdoteReducer'
+import { initializeAnecdotesAsync } from './reducers/anecdoteReducer'
 
 
 const App = () => {
@@ -13,7 +13,7 @@ const App = () => {
 
   useEffect(() => {
     getAll()
-    .then(anecdotes => dispatch(initializeAnecdotes(anecdotes)))
+    .then(anecdotes => dispatch(initializeAnecdotesAsync(anecdotes)))
   }, [dispatch])
 
 
