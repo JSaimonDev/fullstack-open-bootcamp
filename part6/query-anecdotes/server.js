@@ -4,9 +4,9 @@ const router = jsonServer.router('db.json')
 const middlewares = jsonServer.defaults()
 
 const validator = (request, response, next) => {
-  console.log()
 
   const { content } = request.body
+  console.log(content)
 
   if (request.method==='POST' && (!content || content.length<5) ) {
     return response.status(400).json({
