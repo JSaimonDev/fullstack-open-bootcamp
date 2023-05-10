@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import Note from './components/Note'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
-import User from './components/User'
+import Users from './components/Users'
 import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
 import Togglable from './components/Togglable'
@@ -27,7 +27,6 @@ const App = () => {
   const notes = useSelector(state => state.notes)
 
   const user = useSelector(state => state.userSession)
-  const userList = useSelector(state => state.userList)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
@@ -149,20 +148,7 @@ const App = () => {
           />
         )}
       </ul>
-      <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <td>blogs created</td></tr>
-        </thead>
-        <tbody>
-          {userList.map(user => (
-            <User key={user.id} user={user} />
-          ))}
-        </tbody>
-      </table>
-
+      <Users />
       <Footer />
     </div>
   )
