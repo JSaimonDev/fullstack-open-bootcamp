@@ -1,10 +1,13 @@
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const SingleUser = ({ user }) => {
   return (
     <tr>
-      <td>{user.name}</td>
-      <td>{user.notes.length}</td>
+      <Link to={`/users/${user.id}`}>
+        <td>{user.name}</td>
+        <td>{user.notes.length}</td>
+      </Link>
     </tr>
   )}
 

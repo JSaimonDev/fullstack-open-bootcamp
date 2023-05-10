@@ -14,10 +14,13 @@ import { initializeNotes, createNew }  from './reducers/notes'
 import { setUserSession } from './reducers/user-session'
 import { initializeUserList } from './reducers/user-list'
 import userListService from './services/user-list'
+import { Routes, Route } from 'react-router-dom'
+import UserNotes from './components/UserNotes'
+import NotesList from './components/NotesList'
+
 
 
 const App = () => {
-  const [showAll, setShowAll] = useState(true)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -85,28 +88,12 @@ const App = () => {
       })
   }
 
-  const notesToShow = showAll
-    ? notes
-    : notes.filter(note => note.important)
-
-  const toggleImportanceOf = id => {
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
-
-    noteService
-      .update(id, changedNote).then(returnedNote => {
-        dispatch(initializeNotes(notes.map(note => note.id !== id ? note : returnedNote)))
-      })
-      .catch(() => {
-        dispatch(setNotification(
-          `Note '${note.content}' was already removed from server`
-        ))
-        setTimeout(() => {
-          dispatch(setNotification(null))
-        }, 5000)
-        dispatch(initializeNotes((notes.filter(n => n.id !== id))))
-      })
-  }
+  const NotesUsersList = () => (
+    <div>
+      <NotesList />
+      <Users />
+    </div>
+  )
 
   return (
     <div>
@@ -134,21 +121,11 @@ const App = () => {
         </div>
       }
 
-      <div>
-        <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? 'important' : 'all' }
-        </button>
-      </div>
-      <ul>
-        {notesToShow.map(note =>
-          <Note
-            key={note.id}
-            note={note}
-            toggleImportance={() => toggleImportanceOf(note.id)}
-          />
-        )}
-      </ul>
-      <Users />
+      <Routes>
+        <Route path="/" element={<NotesUsersList />} />
+        <Route path="/users/:id" element={<UserNotes/>} />
+        <Route path="/notes/:id" element={<Note />} />
+      </Routes>
       <Footer />
     </div>
   )
