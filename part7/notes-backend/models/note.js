@@ -11,7 +11,8 @@ const noteSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-  likes: Number
+  likes: Number,
+  comments: [String]
 })
 
 noteSchema.set('toJSON', {

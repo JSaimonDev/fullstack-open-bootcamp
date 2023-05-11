@@ -31,4 +31,10 @@ const deleteNote = (id) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, setToken, deleteNote }
+const postComment = (id, comment) => {
+  const request = axios.post(`${ baseUrl }/${id}/comments`, { 'comment': comment })
+  console.log('comment', comment)
+  return request.then(response => response.data)
+}
+
+export default { getAll, create, update, setToken, deleteNote, postComment }

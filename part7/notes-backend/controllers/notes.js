@@ -73,4 +73,13 @@ notesRouter.put('/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+notesRouter.post('/:id/comments', async (request, response) => {
+  const comment = request.body.comment
+
+  const note = await Note.findById(request.params.id)
+  note.comments = note.comments.concat(comment)
+  await note.save()
+  response.status(201).json(note)
+})
+
 module.exports = notesRouter

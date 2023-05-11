@@ -8,6 +8,7 @@ import notificationReducer from './reducers/notification'
 import notesReducer from './reducers/notes'
 import userSessionReducer from './reducers/user-session'
 import userListReducer from './reducers/user-list'
+import loginDataReducer from './reducers/login-data'
 
 import { BrowserRouter } from 'react-router-dom'
 
@@ -16,7 +17,8 @@ const store = configureStore({
     notification: notificationReducer,
     notes: notesReducer,
     userSession: userSessionReducer,
-    userList: userListReducer
+    userList: userListReducer,
+    loginData: loginDataReducer
   }
 })
 
