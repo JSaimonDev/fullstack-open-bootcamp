@@ -6,6 +6,7 @@ import noteService from '../services/notes'
 import { setUsername, setPassword, resetLoginData } from '../reducers/login-data'
 import { setUserSession } from '../reducers/user-session'
 import { setNotification } from '../reducers/notification'
+import { TextField, Button } from '@mui/material'
 
 
 const LoginForm = ({
@@ -15,29 +16,36 @@ const LoginForm = ({
   username,
   password
 }) => {
+
+  const padding = {
+    padding: 5
+  }
+
   return (
-    <div>
+    <div style={padding}>
       <h2>Login</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form onSubmit={handleSubmit} style={padding}>
+        <div  style={padding}>
          username
-          <input
+          <TextField
             value={username}
             id='username'
             onChange={handleUsernameChange}
+            style={padding}
           />
         </div>
-        <div>
+        <div style={padding}>
           password
-          <input
+          <TextField
             type="password"
             id='password'
             value={password}
             onChange={handlePasswordChange}
+            style={padding}
           />
         </div>
-        <button id="login-button" type="submit">login</button>
+        <Button variant="contained" id="login-button" type="submit" style={padding}>login</Button>
       </form>
     </div>
   )
@@ -77,6 +85,7 @@ const Login = () => {
       }, 5000)
     }
   }
+
 
   return (
     <div>

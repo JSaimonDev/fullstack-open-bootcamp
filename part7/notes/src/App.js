@@ -14,6 +14,7 @@ import UserNotes from './components/UserNotes'
 import NotesList from './components/NotesList'
 import NavBar from './components/NavBar'
 import Login from './components/Login'
+import { Container } from '@mui/material'
 
 
 
@@ -44,7 +45,7 @@ const App = () => {
   }, [notes])
 
   return (
-    <div>
+    <Container>
       <NavBar />
 
       <h1>Notes app</h1>
@@ -59,7 +60,7 @@ const App = () => {
         <Route path="/login" element={<Login/>} />
       </Routes>
       <Footer />
-    </div>
+    </Container>
   )
 }
 

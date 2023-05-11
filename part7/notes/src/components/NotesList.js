@@ -6,6 +6,12 @@ import noteService from '../services/notes'
 import { createNew } from '../reducers/notes'
 import { setNotification } from '../reducers/notification'
 import { useRef } from 'react'
+import { Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper, } from '@mui/material'
 
 const NotesList = () => {
   const notes = useSelector(state => state.notes)
@@ -35,13 +41,27 @@ const NotesList = () => {
           </Togglable>
         </div>
       }
-      <ul>
-        {notes.map(note =>
-          <Link to={`/notes/${note.id}`} key={note.id}>
-            {note.content}
-          </Link>
-        )}
-      </ul>
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableBody>
+
+            {notes.map(note =>
+              <TableRow key={note.id}>
+                <TableCell>
+                  <Link to={`/notes/${note.id}`} >
+                    {note.content}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  {note.user.name}
+                </TableCell>
+              </TableRow>
+            )}
+
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )}
 
