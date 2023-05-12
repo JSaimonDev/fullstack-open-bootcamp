@@ -1,14 +1,21 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Table,
+  TableBody,
+  TableHead,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper, } from '@mui/material'
 
 const SingleUser = ({ user }) => {
   return (
-    <tr>
-      <Link to={`/users/${user.id}`}>
-        <td>{user.name}</td>
-        <td>{user.notes.length}</td>
-      </Link>
-    </tr>
+    <TableRow>
+
+      <TableCell><Link to={`/users/${user.id}`}>{user.name}</Link></TableCell>
+      <TableCell>{user.notes.length}</TableCell>
+
+    </TableRow>
   )}
 
 const Users = () => {
@@ -17,18 +24,20 @@ const Users = () => {
   return (
     <div>
       <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <td>blogs created</td></tr>
-        </thead>
-        <tbody>
-          {userList.map(user => (
-            <SingleUser key={user.id} user={user} />
-          ))}
-        </tbody>
-      </table>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell></TableCell>
+              <TableCell>blogs created</TableCell></TableRow>
+          </TableHead>
+          <TableBody>
+            {userList.map(user => (
+              <SingleUser key={user.id} user={user} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }

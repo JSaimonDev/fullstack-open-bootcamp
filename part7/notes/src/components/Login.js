@@ -29,7 +29,7 @@ const LoginForm = ({
         <div  style={padding}>
          username
           <TextField
-            value={username}
+            defaultValue={username}
             id='username'
             onChange={handleUsernameChange}
             style={padding}
@@ -40,7 +40,7 @@ const LoginForm = ({
           <TextField
             type="password"
             id='password'
-            value={password}
+            defaultValue={password}
             onChange={handlePasswordChange}
             style={padding}
           />
@@ -79,11 +79,19 @@ const Login = () => {
       dispatch(setUserSession(user))
       dispatch(resetLoginData())
     } catch (exception) {
-      dispatch(setNotification(exception))
+      dispatch(setNotification(exception.message))
       setTimeout(() => {
         dispatch(setNotification(null))
       }, 5000)
     }
+  }
+
+  const handleUsernameChange  = (event) => {
+    dispatch(setUsername(event.target.value))
+  }
+
+  const handlePasswordChange  = (event) => {
+    dispatch(setPassword(event.target.value))
   }
 
 
@@ -94,8 +102,8 @@ const Login = () => {
         <LoginForm
           username={username}
           password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleUsernameChange={handleUsernameChange}
+          handlePasswordChange={handlePasswordChange}
           handleSubmit={handleLogin}
         />
       </Togglable>
