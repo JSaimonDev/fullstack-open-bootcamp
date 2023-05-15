@@ -137,18 +137,12 @@ const resolvers = {
     dummy: () => 0,
     bookCount: () => books.length,
     authorCount: () => authors.length,
-    // allBooks: (root, args) => {
-    //   if(!args.author && args.genre)return books.filter(book => book.genres.includes(args.genre))
-    //   else if (args.author && !args.genre) return books.filter(book => book.author === args.author)
-    //   else if (args.author && args.genre) return books.filter(book => book.author === args.author && book.genres.includes(args.genre))
-    //   else return books
-    // },
     allBooks: (root, args) => {
-    args.author && args.genre
-    ? books.filter(book => book.author === args.author && book.genres.includes(args.genre))
-    : args.author ? books.filter(book => book.author === args.author)
-    : args.genre ? books.filter(book => book.genres.includes(args.genre))
-    : books},
+      if(!args.author && args.genre)return books.filter(book => book.genres.includes(args.genre))
+      else if (args.author && !args.genre) return books.filter(book => book.author === args.author)
+      else if (args.author && args.genre) return books.filter(book => book.author === args.author && book.genres.includes(args.genre))
+      else return books
+    },
     allAuthors: () => authors,
   },
   Author: {
@@ -164,10 +158,11 @@ const resolvers = {
       return book
     },
     editAuthor: (root, args) => {
-      let findAuthor = authors.find(author => author.name === args.name)
-      if (findAuthor){
-        findAuthor = { ...findAuthor, name: args.name, born: args.setBornTo }
-        return { name: findAuthor.name, born: findAuthor.born }
+      console.log(args)
+      let authorIndex = authors.findIndex(author => author.name === args.name)
+      if (authorIndex !== -1){
+        authors[authorIndex] = { ...authors[authorIndex], name: args.name, born: args.setBornTo }
+        return { name: authors[authorIndex].name, born: authors[authorIndex].born }
       }
       else return null 
     }
