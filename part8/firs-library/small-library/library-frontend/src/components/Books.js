@@ -3,26 +3,15 @@ import { useEffect, useState } from "react"
 import { useQuery } from "@apollo/client"
 
 const Books = (props) => {
-  const [genreFilter, setGenreFilter] = useState('all')
-  let queryVariables = {}
-  if (genreFilter !== 'all') {
-  queryVariables = { genre: genreFilter };
-  }
 
-  const result = useQuery(ALL_BOOKS, {
-    variables: queryVariables
-  })
-
-  console.log('result', result)
-
+  const result = useQuery(ALL_BOOKS)
   const [genreList, setGenreList] = useState(['all'])
+  const [genreFilter, setGenreFilter] = useState('all')
 
   useEffect(() => {
     if(!result.data) return
-    console.log(result.data)
-    const newGenres = result.data.allBooks.map((book) => book.genres).flat()
-    const genres = genreList.concat(newGenres)
-    const uniqueGenres = [...new Set(genres)]
+    const genres = result.data.allBooks.map((book) => book.genres).flat()
+    const uniqueGenres = ["all", ...new Set(genres)]
     setGenreList(uniqueGenres)
   }, [result.data])
 
@@ -47,6 +36,7 @@ const Books = (props) => {
             <th>published</th>
           </tr>
           {result.data.allBooks.map((a) => {
+            if (genreFilter === 'all') {
               return (
                 <tr key={a.title}>
                   <td>{a.title}</td>
@@ -54,6 +44,17 @@ const Books = (props) => {
                   <td>{a.published}</td>
                 </tr>
               )
+            }
+            else if (a.genres.includes(genreFilter)) {
+              return (
+                <tr key={a.title}>
+                  <td>{a.title}</td>
+                  <td>{a.author.name}</td>
+                  <td>{a.published}</td>
+                </tr>
+              )
+            }
+            return null
           })
           }
           <tr>

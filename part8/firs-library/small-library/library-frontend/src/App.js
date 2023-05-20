@@ -4,29 +4,13 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import Recommend from './components/Recommend'
-import { useApolloClient, useSubscription } from '@apollo/client'
-import { ALL_BOOKS, BOOK_ADDED } from './Queries'
+import { useApolloClient } from '@apollo/client'
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
   const client = useApolloClient()
 
-  useSubscription(BOOK_ADDED, {
-      onData: ({ data }) => {
-        console.log('data', data)
-        const addedBook = data.data.bookAdded
-
-        const dataInStore = client.readQuery({ query: ALL_BOOKS })
-        client.writeQuery({
-          query: ALL_BOOKS,
-          data: {
-            ...dataInStore,
-            allBooks: [...dataInStore.allBooks, addedBook],
-          },
-        })
-      }})
-    
   const logout = () => {
     setToken(null)
     localStorage.clear()
