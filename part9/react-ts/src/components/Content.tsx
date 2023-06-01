@@ -1,7 +1,7 @@
-import { coursePart } from "../types"
+import { CoursePart } from "../types"
 
 export interface contentProps { 
-  courseParts: coursePart[]
+  courseParts: CoursePart[]
 }
 
 const Content = ({courseParts}: contentProps) => {
